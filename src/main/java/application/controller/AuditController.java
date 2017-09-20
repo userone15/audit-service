@@ -30,11 +30,13 @@ public class AuditController {
 	private AuditRepository auditRepository;
 
 	@RequestMapping(method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
-			MediaType.APPLICATION_JSON_VALUE }, value = "/auditOrder")
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE}, value = "/auditOrder")
 	@ApiOperation(value = "Audit Service", notes = "Audit an order. SLA:500")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Order audited Successfully"),
 			@ApiResponse(code = 400, message = "Invalid Input Provided"), @ApiResponse(code = 404, message = "Error") })
-	public ResponseEntity<?> auditOrder(@RequestBody Order order) {
+	public ResponseEntity<?> auditOrder(Order order) {
+		LOG.info("System URL : " + order.getSystemUrl());
+		LOG.info("Order Number : " + order.getOrderNumber());
 		Map<String, Object> response = new LinkedHashMap<String, Object>();
 		response.put("message", "Order audited successfully");
 		response.put("product", auditRepository.save(order));
